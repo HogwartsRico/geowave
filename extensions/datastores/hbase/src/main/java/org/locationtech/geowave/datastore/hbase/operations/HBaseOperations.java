@@ -1917,6 +1917,7 @@ public class HBaseOperations implements
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
 		if (isServerSideLibraryEnabled()) {
+			LOGGER.warn("USING HBASE DELETER");
 			return new HBaseDeleter(
 					readerParams,
 					this);
@@ -1926,10 +1927,12 @@ public class HBaseOperations implements
 					readerParams.getIndex().getName(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {
+				LOGGER.warn("USING ROW DELETER WITH PARAMS");
 				return new QueryAndDeleteByRow<>(
 						rowDeleter,
 						createReader(readerParams));
 			}
+			LOGGER.warn("USING ROW DELETER EMPTY PARAMS");
 			return new QueryAndDeleteByRow<>();
 		}
 	}
